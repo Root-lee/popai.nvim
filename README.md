@@ -23,7 +23,7 @@ A Neovim plugin that sends text under cursor or visual selection to Ollama or Op
 
 ```lua
 {
-  "your-username/popai.nvim",
+  "Root-lee/popai.nvim",
   config = function()
     require("popai").setup({
       -- your configuration here
