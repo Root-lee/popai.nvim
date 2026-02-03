@@ -36,24 +36,6 @@ A Neovim plugin that sends text under cursor or visual selection to Ollama or Op
 }
 ```
 
-### Local Installation
-
-If you have the plugin locally:
-
-```lua
-{
-  dir = vim.fn.stdpath("config") .. "/popai.nvim",
-  name = "popai.nvim",
-  config = function()
-    require("popai").setup({})
-  end,
-  cmd = "Popai",
-  keys = {
-    { "<leader>t", ":Popai translate<CR>", mode = { "n", "v" }, desc = "Translate with PopAI" },
-  },
-}
-```
-
 ## Configuration
 
 ### Default Configuration
