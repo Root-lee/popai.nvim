@@ -11,6 +11,17 @@ A Neovim plugin that sends text under cursor or visual selection to Ollama or Op
 - 📝 **Customizable prompts** for different actions (translate, explain, refactor, etc.)
 - ⏳ Built-in **loading indicator**
 
+## 🎬 Demo
+
+![popai.nvim demo](assets/demo.gif)
+
+The demo showcases:
+- 🌐 **Translation** - Translate text between Chinese and English
+- 📐 **Regex Explain** - Break down complex regex patterns into readable explanations
+- ⏰ **Cron Explain** - Convert cron expressions to human-readable sentences
+- 💻 **Shell Explain** - Analyze shell commands and their parameters
+- 😀 **Emoji** - Convert text to emoji expressions
+
 ## 📋 Requirements
 
 - Neovim >= 0.10.0 (uses `vim.system` for async HTTP)

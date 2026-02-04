@@ -1,0 +1,20 @@
+# Demo: popai.nvim
+# A powerful AI assistant for Neovim
+
+def hello_world():
+    print('Hello, World!')
+
+# Chinese text for translation
+msg = '今天天气真好'
+
+# Regex pattern for digits
+pattern = r'\d{3}-\d{4}'
+
+# Cron expression: run every day at 3:30 AM
+cron = '30 3 * * *'
+
+# Shell command example
+cmd = "ls -la | grep .py"
+
+# Text for emoji
+mood = 'I love coding'
