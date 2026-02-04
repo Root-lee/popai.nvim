@@ -55,8 +55,22 @@ function M.create_window()
   if row < 0 then row = M.anchor_row + 1 end
   
   local col = M.anchor_col
-  if col + width > vim.o.columns then
+  
+  -- Smart positioning: center if too wide, or ensure it fits on screen
+  if width > vim.o.columns * 0.8 then
+      col = math.floor((vim.o.columns - width) / 2)
+  elseif col + width > vim.o.columns then
     col = vim.o.columns - width - 2
+  end
+  
+  -- Ensure col is non-negative
+  if col < 0 then col = 1 end
+
+  local title = config.options.ui.title
+  if title and title ~= "" then
+      -- Add a little padding to the title if not already present
+      if not title:match("^%s") then title = " " .. title end
+      if not title:match("%s$") then title = title .. " " end
   end
 
   local opts = {
@@ -66,15 +80,28 @@ function M.create_window()
     row = row,
     col = col,
     style = "minimal",
-    border = config.options.ui.border,
-    title = config.options.ui.title,
+    border = config.options.ui.border or "rounded",
+    title = title,
     title_pos = "center",
+    -- Add padding to the window content
+    -- Note: 'noautocmd' is often used but not strictly necessary here
   }
 
+  -- 1. Create the window
   M.win = vim.api.nvim_open_win(M.buf, true, opts)
   
+  -- 2. Set window options for better UX
   vim.api.nvim_set_option_value("wrap", true, { win = M.win })
   vim.api.nvim_set_option_value("linebreak", true, { win = M.win })
+  vim.api.nvim_set_option_value("cursorline", false, { win = M.win }) -- No cursorline needed for output
+  vim.api.nvim_set_option_value("number", false, { win = M.win })
+  vim.api.nvim_set_option_value("relativenumber", false, { win = M.win })
+  vim.api.nvim_set_option_value("foldenable", false, { win = M.win })
+  vim.api.nvim_set_option_value("signcolumn", "no", { win = M.win })
+
+  -- 3. Set highlights for "modern" look
+  -- Link to Telescope/Lazy generic highlights if available, or define defaults
+  vim.api.nvim_set_option_value("winhl", "Normal:NormalFloat,FloatBorder:FloatBorder,FloatTitle:FloatTitle", { win = M.win })
   
   vim.keymap.set("n", "q", function() M.close() end, { buffer = M.buf, silent = true })
   vim.keymap.set("n", "<Esc>", function() M.close() end, { buffer = M.buf, silent = true })
@@ -118,7 +145,12 @@ end
 
 function M.show_loading()
   M.clear()
-  M.write("Loading...")
+  -- Use a spinner if possible, or just text
+  local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+  M.write(" " .. spinner[1] .. " Thinking...")
+  
+  -- Simple animation loop could be added here with vim.loop.new_timer
+  -- For now, static text with an icon is better than just "Loading..."
 end
 
 function M.clear()
