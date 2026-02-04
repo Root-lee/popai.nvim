@@ -19,11 +19,23 @@ end
 local function update_window_size()
   if not M.win or not vim.api.nvim_win_is_valid(M.win) or not M.buf then return end
 
-  local line_count = vim.api.nvim_buf_line_count(M.buf)
-  local max_height = math.floor(vim.o.lines * config.options.ui.height_ratio)
-  local new_height = math.min(math.max(1, line_count), max_height)
-  
   local current_config = vim.api.nvim_win_get_config(M.win)
+  local width = current_config.width
+  local max_height = math.floor(vim.o.lines * config.options.ui.height_ratio)
+  
+  local lines = vim.api.nvim_buf_get_lines(M.buf, 0, -1, false)
+  local wrapped_height = 0
+  for _, line in ipairs(lines) do
+    local line_width = vim.fn.strdisplaywidth(line)
+    if line_width == 0 then
+      wrapped_height = wrapped_height + 1
+    else
+      wrapped_height = wrapped_height + math.ceil(line_width / width)
+    end
+  end
+
+  local new_height = math.min(math.max(1, wrapped_height), max_height)
+  
   local new_row = M.anchor_row - new_height - 1
   if new_row < 0 then new_row = M.anchor_row + 1 end
   
@@ -31,7 +43,7 @@ local function update_window_size()
     relative = "editor",
     row = new_row,
     col = current_config.col,
-    width = current_config.width,
+    width = width,
     height = new_height,
   })
 end
