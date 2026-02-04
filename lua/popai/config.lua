@@ -4,6 +4,10 @@ M.defaults = {
   debug = false,
   -- Service type: 'ollama' or 'openai'
   service = "ollama",
+
+  -- Global system prompt (optional)
+  -- Applies to both Ollama and OpenAI
+  system_prompt = "Act as a concise coding assistant. Provide direct answers without unnecessary conversational filler.",
   
   -- Ollama specific configuration
   ollama = {

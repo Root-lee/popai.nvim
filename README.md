@@ -1,23 +1,23 @@
-# popai.nvim
+# 🍿 popai.nvim
 
 A Neovim plugin that sends text under cursor or visual selection to Ollama or OpenAI-compatible services, displaying the response in a floating window.
 
-## Features
+## ✨ Features
 
-- Support for **Ollama** and **OpenAI-compatible** APIs
-- **Streaming** response with real-time display
-- **Adaptive** floating window size
-- Works in **Normal mode** (word under cursor) and **Visual mode** (selected text)
-- **Customizable prompts** for different actions (translate, explain, refactor, etc.)
-- Built-in **loading indicator**
+- 🤖 Support for **Ollama** and **OpenAI-compatible** APIs
+- ⚡ **Streaming** response with real-time display
+- 📐 **Adaptive** floating window size
+- 🔄 Works in **Normal mode** (word under cursor) and **Visual mode** (selected text)
+- 📝 **Customizable prompts** for different actions (translate, explain, refactor, etc.)
+- ⏳ Built-in **loading indicator**
 
-## Requirements
+## 📋 Requirements
 
 - Neovim >= 0.10.0 (uses `vim.system` for async HTTP)
 - `curl` installed on your system
 - Ollama running locally, or an OpenAI-compatible API endpoint
 
-## Installation
+## 📦 Installation
 
 ### Using [lazy.nvim](https://github.com/folke/lazy.nvim)
 
@@ -36,7 +36,7 @@ A Neovim plugin that sends text under cursor or visual selection to Ollama or Op
 }
 ```
 
-## Configuration
+## ⚙️ Configuration
 
 ### Default Configuration
 
@@ -44,6 +44,10 @@ A Neovim plugin that sends text under cursor or visual selection to Ollama or Op
 require("popai").setup({
   -- Service type: "ollama" or "openai"
   service = "ollama",
+
+  -- Global system prompt (optional)
+  -- Applies to both Ollama and OpenAI
+  system_prompt = "Act as a concise coding assistant. Provide direct answers without unnecessary conversational filler.",
 
   -- Ollama configuration
   ollama = {
@@ -125,7 +129,7 @@ require("popai").setup({
 })
 ```
 
-## Usage
+## 🚀 Usage
 
 ### Commands
 
@@ -159,6 +163,6 @@ vim.keymap.set({ "n", "v" }, "<leader>te", ":Popai explain<CR>", { desc = "Expla
 vim.keymap.set({ "n", "v" }, "<leader>tr", ":Popai refactor<CR>", { desc = "Refactor" })
 ```
 
-## License
+## 📄 License
 
 MIT

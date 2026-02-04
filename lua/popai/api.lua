@@ -25,13 +25,21 @@ function M.request(prompt)
       prompt = prompt,
       stream = true,
     }
+    
+    if opts.system_prompt then
+      body.system = opts.system_prompt
+    end
   elseif service == "openai" then
     url = opts.openai.url
+    local messages = {}
+    if opts.system_prompt then
+      table.insert(messages, { role = "system", content = opts.system_prompt })
+    end
+    table.insert(messages, { role = "user", content = prompt })
+
     body = {
       model = opts.openai.model,
-      messages = {
-        { role = "user", content = prompt }
-      },
+      messages = messages,
       stream = true,
     }
     if opts.openai.api_key then
