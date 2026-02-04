@@ -159,7 +159,7 @@ function M.show_loading()
   M.clear()
   -- Use a spinner if possible, or just text
   local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
-  M.write(" " .. spinner[1] .. " Thinking...")
+  M.write(" " .. spinner[1] .. " Waiting...")
   
   -- Simple animation loop could be added here with vim.loop.new_timer
   -- For now, static text with an icon is better than just "Loading..."

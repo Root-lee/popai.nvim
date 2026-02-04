@@ -61,6 +61,7 @@ function M.request(prompt)
   -- Buffer for accumulating partial chunks
   local buffer = ""
   local first_token = true
+  local in_thinking_block = false
   
   -- Use vim.system for async execution (Nvim 0.10+)
   vim.system(cmd, {
@@ -96,11 +97,43 @@ function M.request(prompt)
             end
             
             if content ~= "" then
-              if first_token then
-                ui.clear()
-                first_token = false
+              -- Handle thinking block logic
+              if content:find("<thinking>") then
+                in_thinking_block = true
+                -- Only clear if it's the very first token, otherwise we might clear previous content
+                if first_token then
+                  ui.clear()
+                  ui.write("Thinking...")
+                  first_token = false
+                end
+                -- Don't print the tag itself or content inside yet
+                -- But if there is content before the tag, we should handle that (simplified here)
+                content = content:gsub("<thinking>.*", "") 
               end
-              ui.write(content)
+
+              if in_thinking_block then
+                if content:find("</thinking>") then
+                   in_thinking_block = false
+                   content = content:gsub(".*</thinking>", "")
+                   -- If we just exited thinking, we might want to clear "Thinking..." text
+                   -- But typical streaming appends. Let's just append the rest.
+                   -- A better UX might be replacing the "Thinking..." line.
+                   -- For now, let's just clear the "Thinking..." indicator if it was the only thing
+                   if first_token == false then 
+                      ui.clear() 
+                   end
+                else
+                   content = "" -- Suppress content inside thinking block
+                end
+              end
+
+              if content ~= "" then
+                if first_token then
+                  ui.clear()
+                  first_token = false
+                end
+                ui.write(content)
+              end
             end
           end
         end
