@@ -46,17 +46,25 @@ function M.popai(action_name, is_visual)
     return
   end
 
-  -- Default to 'translate' if no action provided
-  action_name = action_name or "translate"
+  if not action_name or action_name == "" then
+    vim.notify("PopAI: Action argument required", vim.log.levels.ERROR)
+    return
+  end
+
   local template = config.options.prompts[action_name]
   
   if not template then
     -- Fallback: treat action_name as a custom prompt or search in prompts
-    template = config.options.prompts["translate"] -- Safe fallback
-    vim.notify("PopAI: Unknown action '" .. action_name .. "', using translate.", vim.log.levels.INFO)
+    template = config.options.prompts["translate_ch"] -- Safe fallback
+    vim.notify("PopAI: Unknown action '" .. action_name .. "', using translate_ch.", vim.log.levels.INFO)
   end
 
-  local full_prompt = template .. text
+  local full_prompt = ""
+  if template:find("{input}") then
+    full_prompt = template:gsub("{input}", function() return text end)
+  else
+    full_prompt = template .. text
+  end
 
   -- Open UI
   ui.create_window()

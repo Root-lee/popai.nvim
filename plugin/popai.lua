@@ -7,13 +7,10 @@ local popai = require("popai")
 
 vim.api.nvim_create_user_command("Popai", function(opts)
   local action = opts.args
-  if action == "" then
-    action = "translate"
-  end
   local is_visual = opts.range == 2
   popai.popai(action, is_visual)
 end, {
-  nargs = "?",
+  nargs = 1,
   range = true,
   complete = function(ArgLead, CmdLine, CursorPos)
     local config = require("popai.config")

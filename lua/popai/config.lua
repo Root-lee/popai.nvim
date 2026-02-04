@@ -26,9 +26,11 @@ M.defaults = {
   
   -- Prompts for different actions
   prompts = {
-    translate = "Translate the following text to Simplified Chinese. Only output the translation result without any explanation:\n\n",
-    explain = "Explain the following code or text concisely:\n\n",
-    refactor = "Refactor the following code to be more readable and efficient:\n\n",
+    translate_ch = "Translate the following text to Simplified Chinese. Only output the translation result without any explanation:\n\n{input}",
+    translate_en = "Translate the following text to English. Only output the translation result without any explanation:\n\n{input}",
+    regex_explain = "Explain this regex concisely: {input} Format the output as follows:\nFunction: [Brief description]\nLogic: [Component breakdown]\nExample: [One matching string]\nUse Markdown. No conversational filler.",
+    shell_explain = "Break down this shell command and explain what each flag/parameter does: {input}",
+    cron_explain = "Translate this Cron expression into a human-readable sentence (e.g., 'Every 15 minutes, Monday through Friday'): {input}",
   },
   
   -- UI Configuration

@@ -64,9 +64,11 @@ require("popai").setup({
 
   -- Prompts for different actions
   prompts = {
-    translate = "Translate the following text to Simplified Chinese. Only output the translation result without any explanation:\n\n",
-    explain = "Explain the following code or text concisely:\n\n",
-    refactor = "Refactor the following code to be more readable and efficient:\n\n",
+    translate_ch = "Translate the following text to Simplified Chinese. Only output the translation result without any explanation:\n\n{input}",
+    translate_en = "Translate the following text to English. Only output the translation result without any explanation:\n\n{input}",
+    regex_explain = "Explain this regex concisely: {input} Format the output as follows:\nFunction: [Brief description]\nLogic: [Component breakdown]\nExample: [One matching string]\nUse Markdown. No conversational filler.",
+    shell_explain = "Break down this shell command and explain what each flag/parameter does: {input}",
+    cron_explain = "Translate this Cron expression into a human-readable sentence (e.g., 'Every 15 minutes, Monday through Friday'): {input}",
   },
 
   -- UI configuration
@@ -120,11 +122,20 @@ require("popai").setup({
 ```lua
 require("popai").setup({
   prompts = {
-    translate = "Translate to Chinese:\n\n",
-    translate_en = "Translate to English:\n\n",
-    summarize = "Summarize the following text in 2-3 sentences:\n\n",
-    fix_grammar = "Fix the grammar and spelling errors in the following text:\n\n",
-    explain_code = "Explain what this code does step by step:\n\n",
+    translate_jp = "Translate the following text to Japanese. Only output the translation result without any explanation:\n\n{input}",
+    emoji = "Express the following text using ONLY emojis. Do not use any words or letters:\n\n{input}",
+    sql = "Format this SQL query and explain what it does concisely:\n\n{input}",
+  },
+})
+```
+
+You can also use the `{input}` placeholder to insert the selected text at a specific position in the prompt. If `{input}` is not present, the text will be appended to the end of the prompt.
+
+```lua
+require("popai").setup({
+  prompts = {
+    -- Text will be inserted at {input}
+    custom_task = "Task: Process the following content: {input}\n\nRequirements: ...",
   },
 })
 ```
@@ -135,16 +146,17 @@ require("popai").setup({
 
 | Command | Description |
 |---------|-------------|
-| `:Popai` | Run default action (translate) on word under cursor or selection |
-| `:Popai translate` | Translate text |
-| `:Popai explain` | Explain text/code |
-| `:Popai refactor` | Refactor code |
+| `:Popai translate_ch` | Translate to Chinese |
+| `:Popai translate_en` | Translate to English |
+| `:Popai regex_explain` | Explain regex |
+| `:Popai shell_explain` | Explain shell command |
+| `:Popai cron_explain` | Explain cron expression |
 | `:Popai <custom>` | Run any custom prompt you defined |
 
 ### Workflow
 
-1. **Normal mode**: Place cursor on a word, then run `:Popai translate`
-2. **Visual mode**: Select text, then run `:'<,'>Popai translate`
+1. **Normal mode**: Place cursor on a word, then run `:Popai translate_ch`
+2. **Visual mode**: Select text, then run `:'<,'>Popai translate_ch`
 3. **Close window**: Press `q` or `<Esc>` in the floating window
 
 ### Recommended Keymaps
@@ -152,15 +164,19 @@ require("popai").setup({
 ```lua
 -- In your lazy.nvim plugin spec
 keys = {
-  { "<leader>tt", ":Popai translate<CR>", mode = { "n", "v" }, desc = "Translate" },
-  { "<leader>te", ":Popai explain<CR>", mode = { "n", "v" }, desc = "Explain" },
-  { "<leader>tr", ":Popai refactor<CR>", mode = { "n", "v" }, desc = "Refactor" },
+  { "<leader>pc", ":Popai translate_ch<CR>", mode = { "n", "v" }, desc = "Translate to Chinese" },
+  { "<leader>pe", ":Popai translate_en<CR>", mode = { "n", "v" }, desc = "Translate to English" },
+  { "<leader>pr", ":Popai regex_explain<CR>", mode = { "n", "v" }, desc = "Regex Explain" },
+  { "<leader>ps", ":Popai shell_explain<CR>", mode = { "n", "v" }, desc = "Shell Explain" },
+  { "<leader>pt", ":Popai cron_explain<CR>", mode = { "n", "v" }, desc = "Cron Explain" },
 }
 
 -- Or manually in your config
-vim.keymap.set({ "n", "v" }, "<leader>tt", ":Popai translate<CR>", { desc = "Translate" })
-vim.keymap.set({ "n", "v" }, "<leader>te", ":Popai explain<CR>", { desc = "Explain" })
-vim.keymap.set({ "n", "v" }, "<leader>tr", ":Popai refactor<CR>", { desc = "Refactor" })
+vim.keymap.set({ "n", "v" }, "<leader>pc", ":Popai translate_ch<CR>", { desc = "Translate to Chinese" })
+vim.keymap.set({ "n", "v" }, "<leader>pe", ":Popai translate_en<CR>", { desc = "Translate to English" })
+vim.keymap.set({ "n", "v" }, "<leader>pr", ":Popai regex_explain<CR>", { desc = "Regex Explain" })
+vim.keymap.set({ "n", "v" }, "<leader>ps", ":Popai shell_explain<CR>", { desc = "Shell Explain" })
+vim.keymap.set({ "n", "v" }, "<leader>pt", ":Popai cron_explain<CR>", { desc = "Cron Explain" })
 ```
 
 ## 📄 License
